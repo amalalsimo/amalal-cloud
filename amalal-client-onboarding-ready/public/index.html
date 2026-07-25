@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>إعداد مساعد واتساب — Amalal</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Amalal">
+        <span class="brand-mark">A</span>
+        <span>
+          <strong>AMALAL</strong>
+          <small>مساعد واتساب الذكي</small>
+        </span>
+      </a>
+      <div class="secure-pill">اتصال آمن</div>
+    </header>
+
+    <main class="wizard-card">
+      <aside class="steps-panel" aria-label="مراحل الإعداد">
+        <div class="welcome-copy">
+          <span class="eyebrow">إعداد سريع</span>
+          <h1>جهّز مساعدك الذكي في دقائق</h1>
+          <p>اربط واتساب، اختر طريقة عمل المساعد، ثم راجع الإعدادات وشغّله.</p>
+        </div>
+
+        <ol class="step-list">
+          <li class="step-item is-active" data-step-indicator="1">
+            <span class="step-number">1</span>
+            <span><strong>ربط واتساب</strong><small>مسح QR من الهاتف</small></span>
+          </li>
+          <li class="step-item" data-step-indicator="2">
+            <span class="step-number">2</span>
+            <span><strong>اختيار المهمة</strong><small>بيع أو دعم أو الاثنين</small></span>
+          </li>
+          <li class="step-item" data-step-indicator="3">
+            <span class="step-number">3</span>
+            <span><strong>معلومات النشاط</strong><small>اللغة والأسلوب والتفاصيل</small></span>
+          </li>
+          <li class="step-item" data-step-indicator="4">
+            <span class="step-number">4</span>
+            <span><strong>المراجعة والتشغيل</strong><small>تأكيد الإعدادات</small></span>
+          </li>
+        </ol>
+
+        <div class="support-note">
+          <strong>معلومة مهمة</strong>
+          <span>لن نطلب منك كلمة سر واتساب. الربط يتم فقط عبر “الأجهزة المرتبطة”.</span>
+        </div>
+      </aside>
+
+      <section class="content-panel">
+        <div id="globalAlert" class="alert hidden" role="alert"></div>
+
+        <!-- STEP 1 -->
+        <section class="wizard-step is-visible" data-step="1">
+          <div class="section-heading">
+            <span class="section-kicker">المرحلة 1 من 4</span>
+            <h2>اربط رقم واتساب</h2>
+            <p>اضغط على الزر، ثم امسح رمز QR من تطبيق واتساب.</p>
+          </div>
+
+          <div id="connectIdle" class="connect-state">
+            <div class="phone-illustration" aria-hidden="true">
+              <div class="phone-screen">
+                <span class="wa-dot"></span>
+                <span class="phone-line"></span>
+                <span class="phone-line short"></span>
+                <span class="phone-button"></span>
+              </div>
+            </div>
+            <button id="connectBtn" class="btn btn-primary btn-lg" type="button">
+              إنشاء الاتصال وعرض QR
+            </button>
+          </div>
+
+          <div id="connectLoading" class="connect-state hidden">
+            <div class="spinner"></div>
+            <h3>جاري إنشاء اتصال خاص بحسابك...</h3>
+            <p>قد تستغرق العملية بضع ثوانٍ.</p>
+          </div>
+
+          <div id="qrState" class="connect-state hidden">
+            <div class="qr-frame">
+              <img id="qrImage" alt="رمز QR لربط واتساب">
+            </div>
+            <div class="qr-instructions">
+              <h3>امسح الرمز من هاتفك</h3>
+              <ol>
+                <li>افتح واتساب.</li>
+                <li>ادخل إلى <strong>الأجهزة المرتبطة</strong>.</li>
+                <li>اضغط <strong>ربط جهاز</strong>.</li>
+                <li>امسح الرمز الموجود هنا.</li>
+              </ol>
+            </div>
+            <div id="connectionStatus" class="status-box status-waiting">
+              في انتظار مسح QR...
+            </div>
+            <button id="refreshQrBtn" class="btn btn-secondary" type="button">
+              تحديث رمز QR
+            </button>
+          </div>
+
+          <div id="connectedState" class="connect-state hidden">
+            <div class="success-icon">✓</div>
+            <h3>تم ربط واتساب بنجاح</h3>
+            <p id="connectedInstanceText">رقمك جاهز لاستقبال الرسائل.</p>
+            <button class="btn btn-primary btn-lg" type="button" data-next-step="2">
+              متابعة إعداد المساعد
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="wizard-step" data-step="2">
+          <div class="section-heading">
+            <span class="section-kicker">المرحلة 2 من 4</span>
+            <h2>كيف تريد أن يعمل المساعد؟</h2>
+            <p>اختر المهمة الأساسية. يمكنك تعديلها لاحقاً.</p>
+          </div>
+
+          <div class="mode-grid">
+            <label class="mode-card">
+              <input type="radio" name="assistantMode" value="sales">
+              <span class="mode-icon">🛒</span>
+              <strong>البيع واستقبال الطلبات</strong>
+              <small>يشرح المنتجات، يجيب عن الأسعار، ويجمع معلومات الطلب.</small>
+            </label>
+
+            <label class="mode-card">
+              <input type="radio" name="assistantMode" value="support">
+              <span class="mode-icon">🎧</span>
+              <strong>خدمة العملاء</strong>
+              <small>يجيب عن الأسئلة المتكررة ويتابع المشاكل والاستفسارات.</small>
+            </label>
+
+            <label class="mode-card">
+              <input type="radio" name="assistantMode" value="sales_support">
+              <span class="mode-icon">🤖</span>
+              <strong>البيع + خدمة العملاء</strong>
+              <small>مساعد شامل للبيع، الطلبات، والإجابة عن الاستفسارات.</small>
+            </label>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-ghost" type="button" data-prev-step="1">رجوع</button>
+            <button id="modeNextBtn" class="btn btn-primary" type="button">متابعة</button>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="wizard-step" data-step="3">
+          <div class="section-heading">
+            <span class="section-kicker">المرحلة 3 من 4</span>
+            <h2>عرّف المساعد على نشاطك</h2>
+            <p>كلما كانت المعلومات أوضح، كانت ردود المساعد أفضل.</p>
+          </div>
+
+          <form id="assistantForm" novalidate>
+            <div class="form-grid">
+              <label class="field">
+                <span>اسم النشاط التجاري *</span>
+                <input id="businessName" name="businessName" type="text" placeholder="مثال: متجر الأمل" required>
+              </label>
+
+              <label class="field">
+                <span>نوع النشاط *</span>
+                <input id="businessType" name="businessType" type="text" placeholder="مثال: ملابس، مطعم، عيادة..." required>
+              </label>
+
+              <label class="field">
+                <span>لغة الرد الأساسية *</span>
+                <select id="language" name="language" required>
+                  <option value="">اختر اللغة</option>
+                  <option value="darija">الدارجة المغربية</option>
+                  <option value="arabic">العربية</option>
+                  <option value="french">الفرنسية</option>
+                  <option value="english">الإنجليزية</option>
+                  <option value="auto">حسب لغة العميل</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>أسلوب الرد *</span>
+                <select id="tone" name="tone" required>
+                  <option value="">اختر الأسلوب</option>
+                  <option value="friendly">ودي وبسيط</option>
+                  <option value="professional">مهني ورسمي</option>
+                  <option value="short">مختصر ومباشر</option>
+                  <option value="persuasive">تجاري ومقنع</option>
+                </select>
+              </label>
+
+              <label class="field field-full">
+                <span>وصف المنتجات أو الخدمات *</span>
+                <textarea id="businessDescription" name="businessDescription" rows="5" placeholder="اشرح ماذا تبيع، الأسعار، المدن المتاحة، طرق التوصيل..." required></textarea>
+              </label>
+
+              <label class="field field-full">
+                <span>رسالة الترحيب</span>
+                <textarea id="welcomeMessage" name="welcomeMessage" rows="3" placeholder="مرحبا بك 👋 كيف نقدر نساعدك؟"></textarea>
+              </label>
+
+              <label class="field">
+                <span>أوقات العمل</span>
+                <input id="workingHours" name="workingHours" type="text" placeholder="الاثنين إلى السبت، 9:00 - 18:00">
+              </label>
+
+              <label class="field">
+                <span>متى يحوّل المحادثة لموظف؟</span>
+                <select id="handoffRule" name="handoffRule">
+                  <option value="customer_request">عندما يطلب العميل موظفاً</option>
+                  <option value="uncertain">عندما لا يعرف الجواب</option>
+                  <option value="complaint">عند الشكايات فقط</option>
+                  <option value="always_ask">يسأل قبل إتمام الطلب</option>
+                </select>
+              </label>
+
+              <label class="field field-full">
+                <span>معلومات إضافية أو تعليمات ممنوعة</span>
+                <textarea id="restrictions" name="restrictions" rows="3" placeholder="مثال: لا تعطِ خصماً بدون موافقة، لا تعد العميل بموعد غير مؤكد..."></textarea>
+              </label>
+            </div>
+
+            <div class="step-actions">
+              <button class="btn btn-ghost" type="button" data-prev-step="2">رجوع</button>
+              <button class="btn btn-primary" type="submit">مراجعة الإعدادات</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- STEP 4 -->
+        <section class="wizard-step" data-step="4">
+          <div class="section-heading">
+            <span class="section-kicker">المرحلة 4 من 4</span>
+            <h2>راجع ثم شغّل المساعد</h2>
+            <p>تأكد أن المعلومات صحيحة قبل الحفظ.</p>
+          </div>
+
+          <div id="reviewBox" class="review-box"></div>
+
+          <div class="step-actions">
+            <button class="btn btn-ghost" type="button" data-prev-step="3">تعديل</button>
+            <button id="activateBtn" class="btn btn-primary btn-lg" type="button">
+              حفظ وتشغيل المساعد
+            </button>
+          </div>
+        </section>
+
+        <!-- RESULT -->
+        <section class="wizard-step" data-step="5">
+          <div class="result-card">
+            <div class="success-icon large">✓</div>
+            <span class="section-kicker">تم الإعداد بنجاح</span>
+            <h2>مساعدك الذكي أصبح جاهزاً</h2>
+            <p>
+              من الآن، ستصل رسائل واتساب إلى النظام وسيجيب المساعد حسب الإعدادات التي اخترتها.
+            </p>
+
+            <div class="result-summary">
+              <div><span>حالة واتساب</span><strong>متصل</strong></div>
+              <div><span>حالة المساعد</span><strong>نشط</strong></div>
+              <div><span>نوع المساعد</span><strong id="resultMode">—</strong></div>
+            </div>
+
+            <button id="restartBtn" class="btn btn-secondary" type="button">
+              تعديل الإعدادات
+            </button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!--
+    في التطبيق الحقيقي، Backend الصفحة يحقن بيانات المستخدم بعد Login:
+    window.AMALAL_USER = { id: "42", email: "client@example.com" };
+  -->
+  <script>
+    window.AMALAL_CONFIG = {
+      apiBase: "/api"
+    };
+
+    window.AMALAL_USER = window.AMALAL_USER || {
+      id: "demo-user",
+      email: "demo@example.com"
+    };
+  </script>
+  <script src="./app.js"></script>
+</body>
+</html>
